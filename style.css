@@ -104,9 +104,9 @@ body {
 
 .side-card img {
     width: 100%;
-    height: 200px;
-    object-fit: cover;
+    height: auto;
     display: block;
+    cursor: pointer;
     transition: transform 0.4s ease;
 }
 
@@ -114,35 +114,106 @@ body {
     transform: scale(1.08);
 }
 
-.mobile-gallery {
+.lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(0, 0, 0, 0.92);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.lightbox.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    background: none;
+    border: none;
+    color: var(--white);
+    font-size: 40px;
+    cursor: pointer;
+    z-index: 10000;
+    transition: color 0.3s ease;
+    line-height: 1;
+}
+
+.lightbox-close:hover {
+    color: var(--pink);
+}
+
+.lightbox-content {
+    max-width: 90vw;
+    max-height: 90vh;
+    cursor: default;
+}
+
+.lightbox-content img {
+    max-width: 90vw;
+    max-height: 85vh;
+    border-radius: 8px;
+    object-fit: contain;
+}
+
+.lightbox-content iframe {
+    width: 80vw;
+    height: 45vw;
+    max-width: 900px;
+    max-height: 506px;
+    border-radius: 8px;
+}
+
+.tab-nav {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 14px 20px;
+    background: rgba(10, 10, 10, 0.85);
+    border: 1px solid #1a1a1a;
+    border-radius: 12px;
+    color: var(--gray);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.tab-btn:hover {
+    border-color: var(--pink-dim);
+    color: var(--pink-soft);
+}
+
+.tab-btn.active {
+    border-color: var(--pink);
+    color: var(--pink);
+    background: rgba(255, 0, 255, 0.08);
+    box-shadow: 0 0 15px rgba(255, 0, 255, 0.15);
+}
+
+.tab-content {
     display: none;
 }
 
-.mobile-gallery-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-}
-
-.gallery-card {
-    border-radius: 12px;
-    overflow: hidden;
-    border: 1px solid #1a1a1a;
-    background: rgba(10, 10, 10, 0.85);
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
-}
-
-.gallery-card:hover {
-    border-color: var(--pink-dim);
-    box-shadow: 0 0 20px rgba(255, 0, 255, 0.2);
-    transform: scale(1.03);
-}
-
-.gallery-card img {
-    width: 100%;
-    height: 160px;
-    object-fit: cover;
+.tab-content.active {
     display: block;
 }
 
@@ -153,7 +224,7 @@ body {
     border: 1px solid var(--pink-dim);
     border-radius: 16px;
     backdrop-filter: blur(16px);
-    margin-bottom: 30px;
+    margin-bottom: 24px;
     position: relative;
     overflow: hidden;
 }
@@ -447,6 +518,166 @@ body {
     line-height: 1.4;
 }
 
+.posts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.post-card {
+    background: rgba(10, 10, 10, 0.85);
+    border: 1px solid #1a1a1a;
+    border-radius: 12px;
+    padding: 20px;
+    backdrop-filter: blur(10px);
+    transition: border-color 0.3s ease;
+}
+
+.post-card:hover {
+    border-color: rgba(255, 0, 255, 0.3);
+}
+
+.post-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+}
+
+.post-avatar {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--pink-dim);
+}
+
+.post-meta {
+    display: flex;
+    flex-direction: column;
+}
+
+.post-author {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--white);
+}
+
+.post-date {
+    font-size: 11px;
+    color: var(--gray);
+}
+
+.post-body {
+    margin-bottom: 14px;
+}
+
+.post-body p {
+    font-size: 14px;
+    color: #ccc;
+    line-height: 1.6;
+}
+
+.post-media {
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.post-media img {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.post-media img:hover {
+    transform: scale(1.02);
+}
+
+.post-media-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.post-media-grid img {
+    height: 200px;
+    object-fit: cover;
+}
+
+.video-wrapper {
+    position: relative;
+    cursor: pointer;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.video-thumb {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.video-wrapper:hover .video-thumb {
+    transform: scale(1.02);
+}
+
+.video-play {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60px; height: 60px;
+    background: rgba(255, 0, 255, 0.85);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    color: var(--white);
+    transition: all 0.3s ease;
+}
+
+.video-wrapper:hover .video-play {
+    background: var(--pink);
+    transform: translate(-50%, -50%) scale(1.1);
+}
+
+.mobile-gallery {
+    display: none;
+}
+
+.mobile-gallery-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.gallery-card {
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid #1a1a1a;
+    background: rgba(10, 10, 10, 0.85);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.gallery-card:hover {
+    border-color: var(--pink-dim);
+    box-shadow: 0 0 20px rgba(255, 0, 255, 0.2);
+    transform: scale(1.03);
+}
+
+.gallery-card img {
+    width: 100%;
+    height: auto;
+    display: block;
+    cursor: pointer;
+}
+
 .comments-box {
     background: rgba(10, 10, 10, 0.85);
     border: 1px solid #1a1a1a;
@@ -520,5 +751,7 @@ body {
     .link-btn { padding: 14px 16px; font-size: 14px; }
     .tag { font-size: 11px; padding: 5px 10px; }
     .mobile-gallery-grid { grid-template-columns: 1fr; }
-    .gallery-card img { height: 180px; }
+    .post-media-grid { grid-template-columns: 1fr; }
+    .post-media-grid img { height: auto; }
+    .tab-btn { font-size: 12px; padding: 12px 14px; }
 }
