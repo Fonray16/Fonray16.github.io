@@ -5,15 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Fonray — Bio</title>
 
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Crect width='32' height='32' fill='%23ff00ff'/%3E%3Crect x='0' y='0' width='16' height='16' fill='%23000'/%3E%3Crect x='16' y='16' width='16' height='16' fill='%23000'/%3E%3C/svg%3E">
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <div class="missing-texture-bg"></div>
-
 <div class="noise-overlay"></div>
 
 <div class="container">
@@ -37,41 +39,42 @@
         </p>
 
         <div class="tags">
-            <span class="tag">🎮 GameDev</span>
-            <span class="tag">🎨 Design</span>
-            <span class="tag">💻 Code</span>
-            <span class="tag">🎬 Video</span>
+            <span class="tag"><i class="fa-solid fa-gamepad"></i> GameDev</span>
+            <span class="tag"><i class="fa-solid fa-palette"></i> Design</span>
+            <span class="tag"><i class="fa-solid fa-code"></i> Code</span>
+            <span class="tag"><i class="fa-solid fa-film"></i> Video</span>
         </div>
     </header>
 
     <section class="section">
         <h2 class="section-title">
-            <span class="error-icon">⚠</span> ССЫЛКИ
+            <i class="fa-solid fa-triangle-exclamation blink-icon"></i>
+            ССЫЛКИ
         </h2>
 
         <div class="links">
 
-          <a href="https://gamejolt.com/games/AlphaProject/1044096" target="_blank" class="link-btn">
-                <span class="link-icon">📩</span>
+            <a href="https://gamejolt.com/games/AlphaProject/1044096" target="_blank" class="link-btn">
+                <i class="fa-solid fa-gamepad link-icon"></i>
                 <span class="link-text">GameJolt</span>
                 <span class="link-arrow">→</span>
             </a>
 
-            <a href="t.me/fonrayChanel" target="_blank" class="link-btn">
-                <span class="link-icon">📩</span>
+            <a href="https://t.me/fonrayChanel" target="_blank" class="link-btn">
+                <i class="fa-brands fa-telegram link-icon"></i>
                 <span class="link-text">Telegram</span>
                 <span class="link-arrow">→</span>
             </a>
 
             <a href="https://www.youtube.com/@Fonray16" target="_blank" class="link-btn">
-                <span class="link-icon">🎬</span>
+                <i class="fa-brands fa-youtube link-icon"></i>
                 <span class="link-text">YouTube</span>
                 <span class="link-arrow">→</span>
             </a>
 
-            <a href="https://x.com/Fonray16" class="link-btn">
-                <span class="link-icon">✉️</span>
-                <span class="link-text">X|Twitter</span>
+            <a href="https://x.com/Fonray16" target="_blank" class="link-btn">
+                <i class="fa-brands fa-x-twitter link-icon"></i>
+                <span class="link-text">X | Twitter</span>
                 <span class="link-arrow">→</span>
             </a>
 
@@ -80,14 +83,15 @@
 
     <section class="section">
         <h2 class="section-title">
-            <span class="error-icon">⚠</span> РАБОТЫ
+            <i class="fa-solid fa-triangle-exclamation blink-icon"></i>
+            РАБОТЫ
         </h2>
 
         <div class="works-grid">
 
             <a href="https://gamejolt.com/games/AlphaProject/1044096" target="_blank" class="work-card">
                 <div class="work-image-wrapper">
-                    <img src="images/work1.png" alt="Проект 1">
+                    <img src="images/work1.png" alt="Alpha Project">
                     <div class="work-overlay">ОТКРЫТЬ</div>
                 </div>
                 <div class="work-info">
@@ -95,6 +99,45 @@
                     <p>Alpha Project - проект-игра, которой занимаюсь только я. И музыка, и спрайты, и код, и сюжет</p>
                 </div>
             </a>
+
+            <div class="work-card">
+                <div class="work-image-wrapper">
+                    <img src="images/work2.png" alt="Работа 2">
+                </div>
+                <div class="work-info">
+                    <h3>3D Рендер</h3>
+                    <p>Моя моделька и рендер с ней</p>
+                </div>
+            </div>
+
+            <div class="work-card">
+                <div class="work-image-wrapper">
+                    <img src="images/work3.png" alt="Работа 3">
+                </div>
+                <div class="work-info">
+                    <h3>Alpha Project Game</h3>
+                    <p>Немного геймплея Alpha Project</p>
+                </div>
+            </div>
+
+            <div class="work-card">
+                <div class="work-image-wrapper">
+                    <img src="images/work4.png" alt="Работа 4">
+                </div>
+                <div class="work-info">
+                    <h3>Alpha Project Menu</h3>
+                    <p>Меню Alpha Project</p>
+                </div>
+            </div>
+            <div class="work-card">
+                <div class="work-image-wrapper">
+                    <img src="images/work5.png" alt="Работа 5">
+                </div>
+                <div class="work-info">
+                    <h3>Мессенджер</h3>
+                    <p>P2P Мессенджер для друзей</p>
+                </div>
+            </div>
 
         </div>
     </section>
