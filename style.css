@@ -69,10 +69,8 @@ body {
 
 .side-gallery {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
     z-index: 3;
     display: flex;
     justify-content: space-between;
@@ -449,6 +447,19 @@ body {
     line-height: 1.4;
 }
 
+.comments-box {
+    background: rgba(10, 10, 10, 0.85);
+    border: 1px solid #1a1a1a;
+    border-radius: 12px;
+    padding: 20px;
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+}
+
+.comments-box .utterances {
+    max-width: 100% !important;
+}
+
 .footer {
     text-align: center;
     padding: 30px 20px;
@@ -496,7 +507,6 @@ body {
     .side-gallery {
         display: none;
     }
-
     .mobile-gallery {
         display: block;
     }
