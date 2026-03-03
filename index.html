@@ -15,6 +15,14 @@
 <div class="missing-texture-bg"></div>
 <div class="noise-overlay"></div>
 
+<audio id="bg-music" loop preload="auto">
+    <source src="music/bg.mp3" type="audio/mpeg">
+</audio>
+
+<button class="music-toggle" id="music-toggle" onclick="toggleMusic()">
+    <i class="fa-solid fa-volume-xmark" id="music-icon"></i>
+</button>
+
 <div class="side-gallery">
     <div class="side-column side-left">
         <div class="side-card"><img src="images/gallery1.png" alt="" onclick="openLightbox(this.src)"></div>
@@ -26,9 +34,57 @@
     </div>
 </div>
 
-<div id="lightbox" class="lightbox" onclick="closeLightbox(event)">
-    <button class="lightbox-close" onclick="closeLightbox(event)">&times;</button>
+<div id="lightbox" class="lightbox">
+    <button class="lightbox-close" onclick="closeLightboxForce()">&times;</button>
+    <div class="lightbox-backdrop" onclick="closeLightboxForce()"></div>
     <div class="lightbox-content" id="lightbox-content"></div>
+</div>
+
+<div id="post-modal" class="modal">
+    <div class="modal-backdrop" onclick="closePostModal()"></div>
+    <div class="modal-box">
+        <div class="modal-header">
+            <h3><i class="fa-solid fa-pen"></i> Новый пост</h3>
+            <button class="modal-close" onclick="closePostModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <textarea id="post-text" placeholder="Текст поста..."></textarea>
+            <input type="text" id="post-youtube" placeholder="YouTube ссылка (необязательно)">
+            <div class="upload-zone" id="upload-zone">
+                <i class="fa-solid fa-cloud-arrow-up"></i>
+                <p>Нажми или перетащи фото</p>
+                <input type="file" id="post-files" multiple accept="image/*" onchange="handleFiles(this.files)">
+            </div>
+            <div class="upload-preview" id="upload-preview"></div>
+        </div>
+        <div class="modal-footer">
+            <button class="modal-btn cancel" onclick="closePostModal()">Отмена</button>
+            <button class="modal-btn submit" id="post-submit" onclick="submitPost()">
+                <i class="fa-solid fa-paper-plane"></i> Опубликовать
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="token-modal" class="modal">
+    <div class="modal-backdrop" onclick="closeTokenModal()"></div>
+    <div class="modal-box modal-box-small">
+        <div class="modal-header">
+            <h3><i class="fa-solid fa-key"></i> Авторизация</h3>
+            <button class="modal-close" onclick="closeTokenModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p class="modal-desc">Вставь GitHub Personal Access Token с правами <code>repo</code></p>
+            <input type="password" id="token-input" placeholder="ghp_xxxxxxxxxxxx">
+            <p class="modal-hint">GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic) → Generate</p>
+        </div>
+        <div class="modal-footer">
+            <button class="modal-btn cancel" onclick="closeTokenModal()">Отмена</button>
+            <button class="modal-btn submit" id="token-submit" onclick="saveToken()">
+                <i class="fa-solid fa-check"></i> Войти
+            </button>
+        </div>
+    </div>
 </div>
 
 <div class="container">
@@ -54,16 +110,15 @@
     </header>
 
     <nav class="tab-nav">
-        <button class="tab-btn active" onclick="switchTab('info')">
+        <button class="tab-btn active" id="btn-info" onclick="switchTab('info')">
             <i class="fa-solid fa-circle-info"></i> Информация
         </button>
-        <button class="tab-btn" onclick="switchTab('posts')">
+        <button class="tab-btn" id="btn-posts" onclick="switchTab('posts')">
             <i class="fa-solid fa-newspaper"></i> Посты
         </button>
     </nav>
 
     <div id="tab-info" class="tab-content active">
-
         <section class="section">
             <h2 class="section-title">
                 <i class="fa-solid fa-triangle-exclamation blink-icon"></i> ССЫЛКИ
@@ -109,23 +164,23 @@
                 </a>
             </div>
         </section>
-
     </div>
 
     <div id="tab-posts" class="tab-content">
-
         <section class="section">
             <h2 class="section-title">
                 <i class="fa-solid fa-triangle-exclamation blink-icon"></i> ПОСТЫ
+                <button class="new-post-btn" onclick="handleNewPost()">
+                    <i class="fa-solid fa-plus"></i>
+                </button>
             </h2>
-
-            <div class="posts-list">
-
-                
-
+            <div class="posts-list" id="posts-list">
+                <div class="posts-loading">
+                    <div class="loader"></div>
+                    <p>Загрузка...</p>
+                </div>
             </div>
         </section>
-
     </div>
 
     <section class="mobile-gallery section">
@@ -164,19 +219,21 @@
 </div>
 
 <script>
+var REPO_OWNER = 'Fonray16';
+var REPO_NAME = 'Fonray16.github.io';
+var API_BASE = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME;
+var audioCtx = null;
+var isMuted = true;
+var pendingFiles = [];
+
 function switchTab(tab) {
-    document.querySelectorAll('.tab-content').forEach(function(el) {
-        el.classList.remove('active');
-    });
-    document.querySelectorAll('.tab-btn').forEach(function(el) {
-        el.classList.remove('active');
-    });
+    document.getElementById('tab-info').classList.remove('active');
+    document.getElementById('tab-posts').classList.remove('active');
+    document.getElementById('btn-info').classList.remove('active');
+    document.getElementById('btn-posts').classList.remove('active');
     document.getElementById('tab-' + tab).classList.add('active');
-    if (tab === 'info') {
-        document.querySelectorAll('.tab-btn')[0].classList.add('active');
-    } else {
-        document.querySelectorAll('.tab-btn')[1].classList.add('active');
-    }
+    document.getElementById('btn-' + tab).classList.add('active');
+    if (tab === 'posts') loadPosts();
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -196,23 +253,321 @@ function openLightboxVideo(embedUrl) {
     document.body.style.overflow = 'hidden';
 }
 
-function closeLightbox(e) {
-    if (e.target === document.getElementById('lightbox') || e.target.classList.contains('lightbox-close')) {
-        var lb = document.getElementById('lightbox');
-        lb.classList.remove('active');
-        document.getElementById('lightbox-content').innerHTML = '';
-        document.body.style.overflow = '';
+function closeLightboxForce() {
+    document.getElementById('lightbox').classList.remove('active');
+    document.getElementById('lightbox-content').innerHTML = '';
+    document.body.style.overflow = '';
+}
+
+function playClick() {
+    if (isMuted) return;
+    try {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        var osc = audioCtx.createOscillator();
+        var gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.type = 'sine';
+        osc.frequency.value = 800;
+        gain.gain.setValueAtTime(0.06, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+        osc.start(audioCtx.currentTime);
+        osc.stop(audioCtx.currentTime + 0.08);
+    } catch(e) {}
+}
+
+function toggleMusic() {
+    var music = document.getElementById('bg-music');
+    var icon = document.getElementById('music-icon');
+    if (isMuted) {
+        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        music.volume = 0.3;
+        music.play().catch(function(){});
+        isMuted = false;
+        icon.className = 'fa-solid fa-volume-high';
+    } else {
+        music.pause();
+        isMuted = true;
+        icon.className = 'fa-solid fa-volume-xmark';
     }
 }
 
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        var lb = document.getElementById('lightbox');
-        lb.classList.remove('active');
-        document.getElementById('lightbox-content').innerHTML = '';
-        document.body.style.overflow = '';
+document.addEventListener('click', function(e) {
+    if (e.target.closest('.link-btn, .tab-btn, .work-card, .side-card, .new-post-btn, .modal-btn, .gallery-card')) {
+        playClick();
     }
 });
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        closeLightboxForce();
+        closePostModal();
+        closeTokenModal();
+    }
+});
+
+function extractYoutubeId(url) {
+    if (!url) return null;
+    var match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([a-zA-Z0-9_-]{11})/);
+    return match ? match[1] : null;
+}
+
+function parsePostBody(body) {
+    var images = [];
+    var youtubeId = null;
+    var text = body || '';
+    text = text.replace(/!\[.*?\]\((.*?)\)/g, function(m, url) {
+        images.push(url);
+        return '';
+    });
+    text = text.replace(/\{\{youtube:(.*?)\}\}/g, function(m, id) {
+        youtubeId = id;
+        return '';
+    });
+    text = text.trim();
+    return { text: text, images: images, youtubeId: youtubeId };
+}
+
+function renderPost(issue) {
+    var parsed = parsePostBody(issue.body);
+    var date = new Date(issue.created_at).toLocaleDateString('ru-RU', {
+        day: 'numeric', month: 'long', year: 'numeric'
+    });
+    var h = '<article class="post-card">';
+    h += '<div class="post-header">';
+    h += '<img src="images/avatar.png" alt="" class="post-avatar">';
+    h += '<div class="post-meta">';
+    h += '<span class="post-author">Fonray</span>';
+    h += '<span class="post-date">' + date + '</span>';
+    h += '</div></div>';
+    if (parsed.text) {
+        h += '<div class="post-body"><p>' + parsed.text.replace(/\n/g, '<br>') + '</p></div>';
+    }
+    if (parsed.images.length === 1) {
+        h += '<div class="post-media">';
+        h += '<img src="' + parsed.images[0] + '" alt="" onclick="openLightbox(this.src)">';
+        h += '</div>';
+    } else if (parsed.images.length > 1) {
+        h += '<div class="post-media post-media-grid">';
+        parsed.images.forEach(function(url) {
+            h += '<img src="' + url + '" alt="" onclick="openLightbox(this.src)">';
+        });
+        h += '</div>';
+    }
+    if (parsed.youtubeId) {
+        h += '<div class="post-media">';
+        h += '<div class="video-wrapper" onclick="openLightboxVideo(\'https://www.youtube.com/embed/' + parsed.youtubeId + '\')">';
+        h += '<img src="https://img.youtube.com/vi/' + parsed.youtubeId + '/maxresdefault.jpg" alt="" class="video-thumb">';
+        h += '<div class="video-play"><i class="fa-solid fa-play"></i></div>';
+        h += '</div></div>';
+    }
+    h += '</article>';
+    return h;
+}
+
+async function loadPosts() {
+    var container = document.getElementById('posts-list');
+    container.innerHTML = '<div class="posts-loading"><div class="loader"></div><p>Загрузка...</p></div>';
+    try {
+        var res = await fetch(API_BASE + '/issues?labels=post&state=open&sort=created&direction=desc&per_page=50');
+        if (!res.ok) throw new Error();
+        var issues = await res.json();
+        if (!issues.length) {
+            container.innerHTML = '<div class="posts-empty"><i class="fa-solid fa-ghost"></i><p>Постов пока нет...</p></div>';
+            return;
+        }
+        var html = '';
+        issues.forEach(function(issue) {
+            html += renderPost(issue);
+        });
+        container.innerHTML = html;
+    } catch(e) {
+        container.innerHTML = '<div class="posts-empty"><i class="fa-solid fa-bug"></i><p>Не удалось загрузить посты</p></div>';
+    }
+}
+
+function handleNewPost() {
+    var token = localStorage.getItem('gh_token');
+    if (!token) {
+        document.getElementById('token-modal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+        return;
+    }
+    openPostModal();
+}
+
+function closeTokenModal() {
+    document.getElementById('token-modal').classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+async function saveToken() {
+    var input = document.getElementById('token-input');
+    var token = input.value.trim();
+    var btn = document.getElementById('token-submit');
+    if (!token) return;
+    btn.innerHTML = '<div class="loader-small"></div> Проверка...';
+    btn.disabled = true;
+    try {
+        var res = await fetch('https://api.github.com/user', {
+            headers: { 'Authorization': 'token ' + token }
+        });
+        if (!res.ok) throw new Error();
+        var user = await res.json();
+        if (user.login !== REPO_OWNER) {
+            alert('Только ' + REPO_OWNER + ' может публиковать посты');
+            throw new Error();
+        }
+        localStorage.setItem('gh_token', token);
+        closeTokenModal();
+        input.value = '';
+        openPostModal();
+        await ensurePostLabel(token);
+    } catch(e) {
+        alert('Неверный токен или нет доступа');
+    }
+    btn.innerHTML = '<i class="fa-solid fa-check"></i> Войти';
+    btn.disabled = false;
+}
+
+async function ensurePostLabel(token) {
+    try {
+        await fetch(API_BASE + '/labels', {
+            method: 'POST',
+            headers: {
+                'Authorization': 'token ' + token,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name: 'post', color: 'ff00ff' })
+        });
+    } catch(e) {}
+}
+
+function openPostModal() {
+    document.getElementById('post-modal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+    pendingFiles = [];
+    document.getElementById('post-text').value = '';
+    document.getElementById('post-youtube').value = '';
+    document.getElementById('upload-preview').innerHTML = '';
+}
+
+function closePostModal() {
+    document.getElementById('post-modal').classList.remove('active');
+    document.body.style.overflow = '';
+    pendingFiles = [];
+}
+
+function handleFiles(files) {
+    var preview = document.getElementById('upload-preview');
+    for (var i = 0; i < files.length; i++) {
+        var file = files[i];
+        if (!file.type.startsWith('image/')) continue;
+        pendingFiles.push(file);
+        var reader = new FileReader();
+        reader.onload = (function(f) {
+            return function(e) {
+                var div = document.createElement('div');
+                div.className = 'preview-item';
+                div.innerHTML = '<img src="' + e.target.result + '" alt="">' +
+                    '<button onclick="removeFile(this, \'' + f.name + '\')">&times;</button>';
+                preview.appendChild(div);
+            };
+        })(file);
+        reader.readAsDataURL(file);
+    }
+}
+
+function removeFile(btn, name) {
+    pendingFiles = pendingFiles.filter(function(f) { return f.name !== name; });
+    btn.parentElement.remove();
+}
+
+var dropZone = document.getElementById('upload-zone');
+dropZone.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    dropZone.classList.add('dragover');
+});
+dropZone.addEventListener('dragleave', function() {
+    dropZone.classList.remove('dragover');
+});
+dropZone.addEventListener('drop', function(e) {
+    e.preventDefault();
+    dropZone.classList.remove('dragover');
+    handleFiles(e.dataTransfer.files);
+});
+
+async function uploadImage(file, token) {
+    return new Promise(function(resolve, reject) {
+        var reader = new FileReader();
+        reader.onload = async function() {
+            var base64 = reader.result.split(',')[1];
+            var filename = Date.now() + '_' + file.name.replace(/[^a-zA-Z0-9._-]/g, '');
+            try {
+                var res = await fetch(API_BASE + '/contents/images/posts/' + filename, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': 'token ' + token,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        message: 'post image: ' + filename,
+                        content: base64
+                    })
+                });
+                if (!res.ok) throw new Error();
+                resolve('https://raw.githubusercontent.com/' + REPO_OWNER + '/' + REPO_NAME + '/main/images/posts/' + filename);
+            } catch(e) {
+                reject(e);
+            }
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+async function submitPost() {
+    var text = document.getElementById('post-text').value.trim();
+    var youtube = document.getElementById('post-youtube').value.trim();
+    var token = localStorage.getItem('gh_token');
+    var btn = document.getElementById('post-submit');
+    if (!text && !pendingFiles.length && !youtube) return;
+    if (!token) { handleNewPost(); return; }
+    btn.innerHTML = '<div class="loader-small"></div> Публикация...';
+    btn.disabled = true;
+    try {
+        var body = text;
+        for (var i = 0; i < pendingFiles.length; i++) {
+            var url = await uploadImage(pendingFiles[i], token);
+            body += '\n\n![image](' + url + ')';
+        }
+        var ytId = extractYoutubeId(youtube);
+        if (ytId) {
+            body += '\n\n{{youtube:' + ytId + '}}';
+        }
+        var dateStr = new Date().toLocaleDateString('ru-RU', {
+            day: 'numeric', month: 'long', year: 'numeric'
+        });
+        var res = await fetch(API_BASE + '/issues', {
+            method: 'POST',
+            headers: {
+                'Authorization': 'token ' + token,
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                title: 'Post: ' + dateStr,
+                body: body,
+                labels: ['post']
+            })
+        });
+        if (!res.ok) throw new Error();
+        closePostModal();
+        loadPosts();
+    } catch(e) {
+        alert('Ошибка публикации');
+    }
+    btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Опубликовать';
+    btn.disabled = false;
+}
 </script>
 
 </body>
