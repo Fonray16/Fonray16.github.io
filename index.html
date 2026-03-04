@@ -15,7 +15,6 @@
 <div class="missing-texture-bg"></div>
 <div class="noise-overlay"></div>
 
-
 <div class="side-decor side-decor-left">
     <div class="decor-line"></div>
     <div class="decor-block">
@@ -53,8 +52,8 @@
     <div class="decor-line"></div>
     <div class="decor-code">
         <p>// fonray.sys</p>
-        <p>ver <span class="decor-pink">16</span></p>
-        <p>build <span class="decor-dim">unst@b1eeee</span></p>
+        <p>ver <span class="decor-pink">2.0.26</span></p>
+        <p>build <span class="decor-dim">stable</span></p>
     </div>
     <div class="decor-line"></div>
     <div class="decor-block">
@@ -89,7 +88,7 @@
 </audio>
 
 <button class="music-toggle" id="music-toggle" onclick="toggleMusic()">
-    <i class="fa-solid fa-volume-xmark" id="music-icon"></i>
+    <i class="fa-solid fa-volume-high" id="music-icon"></i>
 </button>
 
 <div id="lightbox" class="lightbox">
@@ -213,7 +212,7 @@
                     <span class="link-text">Twitch</span>
                     <span class="link-arrow">→</span>
                 </a>
-                <a href="https://undertale-au.fandom.com/ru/wiki/%D0%A3%D1%87%D0%B0%D1%81%D1%82%D0%BD%D0%B8%D0%BA:Fonray" target="_blank" class="link-btn">
+                <a href="https://undertaleau.fandom.com/ru/wiki/%D0%A3%D1%87%D0%B0%D1%81%D1%82%D0%BD%D0%B8%D0%BA:Fonray" target="_blank" class="link-btn">
                     <i class="fa-solid fa-heart link-icon"></i>
                     <span class="link-text">UndertaleAUs</span>
                     <span class="link-arrow">→</span>
@@ -338,7 +337,7 @@ var REPO_OWNER = 'Fonray16';
 var REPO_NAME = 'Fonray16.github.io';
 var API_BASE = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME;
 var audioCtx = null;
-var isMuted = true;
+var isMuted = false;
 var pendingFiles = [];
 
 function updateDecorClock() {
@@ -695,6 +694,17 @@ async function submitPost() {
     btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Опубликовать';
     btn.disabled = false;
 }
+
+// Автозапуск звуков и музыки при первом клике
+document.addEventListener('click', function startAudio() {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    var music = document.getElementById('bg-music');
+    if (!isMuted && music.paused) {
+        music.volume = 0.3;
+        music.play().catch(function(){});
+    }
+    document.removeEventListener('click', startAudio);
+}, { once: true });
 </script>
 
 </body>
