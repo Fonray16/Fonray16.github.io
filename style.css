@@ -239,12 +239,13 @@ body {
     display: none;
 }
 
-/* ===== DASHED LINE (отдельный элемент) ===== */
+/* ===== DASHED LINE ===== */
 .header-dashed {
     width: 100%;
-    height: 0;
-    border-top: 2px dashed var(--pink);
+    height: 4px;
+    background: repeating-linear-gradient(90deg, var(--pink) 0px, var(--pink) 6px, transparent 6px, transparent 12px);
     opacity: 0.6;
+    border-radius: 2px;
 }
 
 /* ===== HEADER ===== */
@@ -262,12 +263,8 @@ body {
 }
 
 .header::before {
-    content: '';
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 4px;
-    background: repeating-linear-gradient(90deg, var(--pink) 0px, var(--pink) 8px, var(--black) 8px, var(--black) 16px);
-    z-index: 1;
+    content: none;
+    display: none;
 }
 
 .header::after {
