@@ -26,6 +26,7 @@ body {
     overflow-x: hidden;
 }
 
+/* ===== BACKGROUNDS ===== */
 .missing-texture-bg {
     position: fixed;
     top: 0; left: 0;
@@ -199,22 +200,6 @@ body {
     text-align: center;
 }
 
-/* Скрываем на средних экранах */
-@media (max-width: 1399px) {
-    .side-decor {
-        width: 200px;
-        padding: 40px 18px;
-        gap: 16px;
-    }
-    .decor-label { font-size: 11px; }
-    .decor-code { font-size: 11px; padding: 12px 14px; }
-    .decor-clock { font-size: 15px; }
-}
-
-@media (max-width: 1199px) {
-    .side-decor { display: none; }
-}
-
 /* ===== MUSIC TOGGLE ===== */
 .music-toggle {
     position: fixed;
@@ -249,9 +234,17 @@ body {
     padding: 50px 20px 30px;
 }
 
-/* Убираем старую пунктирную линию контейнера */
 .container::before {
+    content: none;
     display: none;
+}
+
+/* ===== DASHED LINE (отдельный элемент) ===== */
+.header-dashed {
+    width: 100%;
+    height: 0;
+    border-top: 2px dashed var(--pink);
+    opacity: 0.6;
 }
 
 /* ===== HEADER ===== */
@@ -263,23 +256,11 @@ body {
     border-radius: 16px;
     backdrop-filter: blur(16px);
     margin-bottom: 24px;
-    margin-top: 30px;
+    margin-top: 20px;
     position: relative;
-    overflow: visible;
+    overflow: hidden;
 }
 
-/* Пунктирная линия НАД блоком */
-.header::after {
-    content: '';
-    position: absolute;
-    left: 0; right: 0;
-    top: -18px;
-    height: 0;
-    border-top: 2px dashed var(--pink);
-    opacity: 0.6;
-}
-
-/* Декоративная полоска сверху блока */
 .header::before {
     content: '';
     position: absolute;
@@ -287,6 +268,11 @@ body {
     height: 4px;
     background: repeating-linear-gradient(90deg, var(--pink) 0px, var(--pink) 8px, var(--black) 8px, var(--black) 16px);
     z-index: 1;
+}
+
+.header::after {
+    content: none;
+    display: none;
 }
 
 .avatar-wrapper {
@@ -566,7 +552,7 @@ body {
     line-height: 1.4;
 }
 
-/* ===== GALLERY (единый блок для всех разрешений) ===== */
+/* ===== GALLERY ===== */
 .gallery-section {
     display: block;
 }
@@ -1203,6 +1189,17 @@ body {
 ::selection { background: var(--pink); color: var(--black); }
 
 /* ===== RESPONSIVE ===== */
+@media (max-width: 1399px) {
+    .side-decor {
+        width: 200px;
+        padding: 40px 18px;
+        gap: 16px;
+    }
+    .decor-label { font-size: 11px; }
+    .decor-code { font-size: 11px; padding: 12px 14px; }
+    .decor-clock { font-size: 15px; }
+}
+
 @media (max-width: 1199px) {
     .side-decor { display: none; }
 }
