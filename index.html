@@ -15,6 +15,75 @@
 <div class="missing-texture-bg"></div>
 <div class="noise-overlay"></div>
 
+<!-- ===== ДЕКОРАТИВНЫЕ БОКОВЫЕ ПАНЕЛИ (только ПК) ===== -->
+<div class="side-decor side-decor-left">
+    <div class="decor-line"></div>
+    <div class="decor-block">
+        <span class="decor-label">SYS</span>
+        <div class="decor-bar"><div class="decor-bar-fill" style="width: 73%"></div></div>
+        <span class="decor-value">73%</span>
+    </div>
+    <div class="decor-block">
+        <span class="decor-label">MEM</span>
+        <div class="decor-bar"><div class="decor-bar-fill" style="width: 41%"></div></div>
+        <span class="decor-value">41%</span>
+    </div>
+    <div class="decor-block">
+        <span class="decor-label">NET</span>
+        <div class="decor-bar"><div class="decor-bar-fill" style="width: 88%"></div></div>
+        <span class="decor-value">88%</span>
+    </div>
+    <div class="decor-line"></div>
+    <div class="decor-code">
+        <p>&gt; init_portfolio()</p>
+        <p>&gt; loading assets...</p>
+        <p>&gt; <span class="decor-ok">OK</span></p>
+        <p>&gt; status: <span class="decor-pink">online</span></p>
+    </div>
+    <div class="decor-line"></div>
+    <div class="decor-dots">
+        <span class="dot-on"></span>
+        <span class="dot-on"></span>
+        <span class="dot-off"></span>
+        <span class="dot-on"></span>
+    </div>
+</div>
+
+<div class="side-decor side-decor-right">
+    <div class="decor-line"></div>
+    <div class="decor-code">
+        <p>// fonray.sys</p>
+        <p>ver <span class="decor-pink">2.0.26</span></p>
+        <p>build <span class="decor-dim">stable</span></p>
+    </div>
+    <div class="decor-line"></div>
+    <div class="decor-block">
+        <span class="decor-label">GPU</span>
+        <div class="decor-bar"><div class="decor-bar-fill" style="width: 62%"></div></div>
+        <span class="decor-value">62%</span>
+    </div>
+    <div class="decor-block">
+        <span class="decor-label">CPU</span>
+        <div class="decor-bar"><div class="decor-bar-fill" style="width: 55%"></div></div>
+        <span class="decor-value">55%</span>
+    </div>
+    <div class="decor-line"></div>
+    <div class="decor-code">
+        <p>&gt; scan errors...</p>
+        <p>&gt; found: <span class="decor-pink">404</span></p>
+        <p>&gt; texture: <span class="decor-err">MISSING</span></p>
+        <p>&gt; <span class="decor-dim">¯\_(ツ)_/¯</span></p>
+    </div>
+    <div class="decor-line"></div>
+    <div class="decor-clock" id="decor-clock">00:00:00</div>
+    <div class="decor-dots">
+        <span class="dot-on"></span>
+        <span class="dot-off"></span>
+        <span class="dot-on"></span>
+        <span class="dot-on"></span>
+    </div>
+</div>
+
 <audio id="bg-music" loop preload="auto">
     <source src="music/bg.mp3" type="audio/mpeg">
 </audio>
@@ -22,17 +91,6 @@
 <button class="music-toggle" id="music-toggle" onclick="toggleMusic()">
     <i class="fa-solid fa-volume-xmark" id="music-icon"></i>
 </button>
-
-<div class="side-gallery">
-    <div class="side-column side-left">
-        <div class="side-card"><img src="images/gallery1.png" alt="" onclick="openLightbox(this.src)"></div>
-        <div class="side-card"><img src="images/gallery2.png" alt="" onclick="openLightbox(this.src)"></div>
-    </div>
-    <div class="side-column side-right">
-        <div class="side-card"><img src="images/gallery3.png" alt="" onclick="openLightbox(this.src)"></div>
-        <div class="side-card"><img src="images/gallery4.png" alt="" onclick="openLightbox(this.src)"></div>
-    </div>
-</div>
 
 <div id="lightbox" class="lightbox">
     <button class="lightbox-close" onclick="closeLightboxForce()">&times;</button>
@@ -122,6 +180,7 @@
     </nav>
 
     <div id="tab-info" class="tab-content active">
+
         <section class="section">
             <h2 class="section-title">
                 <i class="fa-solid fa-triangle-exclamation blink-icon"></i> ССЫЛКИ
@@ -152,8 +211,8 @@
                     <span class="link-text">Twitch</span>
                     <span class="link-arrow">→</span>
                 </a>
-                <a href="https://undertale-au.fandom.com/ru/wiki/%D0%A3%D1%87%D0%B0%D1%81%D1%82%D0%BD%D0%B8%D0%BA:Fonray" target="_blank" class="link-btn">
-                    <i class="fa-brands fa-black-heart link-icon"></i>
+                <a href="https://undertaleau.fandom.com/ru/wiki/%D0%A3%D1%87%D0%B0%D1%81%D1%82%D0%BD%D0%B8%D0%BA:Fonray" target="_blank" class="link-btn">
+                    <i class="fa-solid fa-heart link-icon"></i>
                     <span class="link-text">UndertaleAUs</span>
                     <span class="link-arrow">→</span>
                 </a>
@@ -165,7 +224,6 @@
                 <i class="fa-solid fa-triangle-exclamation blink-icon"></i> РАБОТЫ
             </h2>
             <div class="works-grid">
-
                 <a href="https://gamejolt.com/games/AlphaProject/1044096" target="_blank" class="work-card">
                     <div class="work-image-wrapper">
                         <img src="images/work1.png" alt="Alpha Project">
@@ -176,7 +234,6 @@
                         <p>Alpha Project - проект-игра, которой занимаюсь только я. И музыка, и спрайты, и код, и сюжет</p>
                     </div>
                 </a>
-                
                 <a href="https://undertale-au.fandom.com/ru/wiki/Yama" target="_blank" class="work-card">
                     <div class="work-image-wrapper">
                         <img src="images/workYama.png" alt="Yama">
@@ -187,7 +244,6 @@
                         <p>Yama - Мой ОС персонаж UndertaleAU, буквально смерть Сансов</p>
                     </div>
                 </a>
-
                 <a href="https://undertale-au.fandom.com/ru/wiki/Awakened!Gaster" target="_blank" class="work-card">
                     <div class="work-image-wrapper">
                         <img src="images/workAwakeG.png" alt="AwakenedGaster">
@@ -198,7 +254,6 @@
                         <p>Awakaned Gaster - Мой персонаж UndertaleAU, являющийся альтернативой Гастера</p>
                     </div>
                 </a>
-
                 <a href="https://undertale-au.fandom.com/ru/wiki/Returned!Gaster" target="_blank" class="work-card">
                     <div class="work-image-wrapper">
                         <img src="images/workReturnG.png" alt="ReturnedGaster">
@@ -209,8 +264,7 @@
                         <p>Returned Gaster - Мой персонаж UndertaleAU, Гастер созданный по одной из старых теорий</p>
                     </div>
                 </a>
-
-                <a href="https://undertale-au.fandom.com/ru/wiki/%D0%91%D0%BB%D0%BE%D0%B3_%D1%83%D1%87%D0%B0%D1%81%D1%82%D0%BD%D0%B8%D0%BA%D0%B0:Fonray/CodeError!Sans" target="_blank" class="work-card">
+                <a href="https://undertaleau.fandom.com/ru/wiki/%D0%91%D0%BB%D0%BE%D0%B3_%D1%83%D1%87%D0%B0%D1%81%D1%82%D0%BD%D0%B8%D0%BA%D0%B0:Fonray/CodeError!Sans" target="_blank" class="work-card">
                     <div class="work-image-wrapper">
                         <img src="images/workCodeErrorS.png" alt="CodeErrorSans">
                         <div class="work-overlay">ОТКРЫТЬ</div>
@@ -220,9 +274,9 @@
                         <p>CodeError!Sans - Мой первый персонаж UndertaleAU, неудавшийся санс</p>
                     </div>
                 </a>
-                
             </div>
         </section>
+
     </div>
 
     <div id="tab-posts" class="tab-content">
@@ -242,11 +296,12 @@
         </section>
     </div>
 
-    <section class="mobile-gallery section">
+    <!-- ГАЛЕРЕЯ — всегда видна как блок -->
+    <section class="section gallery-section">
         <h2 class="section-title">
             <i class="fa-solid fa-triangle-exclamation blink-icon"></i> ГАЛЕРЕЯ
         </h2>
-        <div class="mobile-gallery-grid">
+        <div class="gallery-grid">
             <div class="gallery-card"><img src="images/gallery1.png" alt="" onclick="openLightbox(this.src)"></div>
             <div class="gallery-card"><img src="images/gallery2.png" alt="" onclick="openLightbox(this.src)"></div>
             <div class="gallery-card"><img src="images/gallery3.png" alt="" onclick="openLightbox(this.src)"></div>
@@ -284,6 +339,19 @@ var API_BASE = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME;
 var audioCtx = null;
 var isMuted = true;
 var pendingFiles = [];
+
+// Часы в боковой панели
+function updateDecorClock() {
+    var el = document.getElementById('decor-clock');
+    if (!el) return;
+    var now = new Date();
+    var h = String(now.getHours()).padStart(2, '0');
+    var m = String(now.getMinutes()).padStart(2, '0');
+    var s = String(now.getSeconds()).padStart(2, '0');
+    el.textContent = h + ':' + m + ':' + s;
+}
+setInterval(updateDecorClock, 1000);
+updateDecorClock();
 
 function switchTab(tab) {
     document.getElementById('tab-info').classList.remove('active');
@@ -352,7 +420,7 @@ function toggleMusic() {
 }
 
 document.addEventListener('click', function(e) {
-    if (e.target.closest('.link-btn, .tab-btn, .work-card, .side-card, .new-post-btn, .modal-btn, .gallery-card')) {
+    if (e.target.closest('.link-btn, .tab-btn, .work-card, .new-post-btn, .modal-btn, .gallery-card')) {
         playClick();
     }
 });
