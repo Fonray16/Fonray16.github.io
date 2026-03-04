@@ -15,7 +15,7 @@
 <div class="missing-texture-bg"></div>
 <div class="noise-overlay"></div>
 
-<!-- ===== ДЕКОРАТИВНЫЕ БОКОВЫЕ ПАНЕЛИ (только ПК) ===== -->
+
 <div class="side-decor side-decor-left">
     <div class="decor-line"></div>
     <div class="decor-block">
@@ -146,6 +146,8 @@
 </div>
 
 <div class="container">
+
+    <div class="header-dashed"></div>
 
     <header class="header">
         <div class="avatar-wrapper">
@@ -296,7 +298,6 @@
         </section>
     </div>
 
-    <!-- ГАЛЕРЕЯ — всегда видна как блок -->
     <section class="section gallery-section">
         <h2 class="section-title">
             <i class="fa-solid fa-triangle-exclamation blink-icon"></i> ГАЛЕРЕЯ
@@ -340,7 +341,6 @@ var audioCtx = null;
 var isMuted = true;
 var pendingFiles = [];
 
-// Часы в боковой панели
 function updateDecorClock() {
     var el = document.getElementById('decor-clock');
     if (!el) return;
